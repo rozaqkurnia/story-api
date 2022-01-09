@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Casts\AsStringable;
+use Illuminate\Database\Eloquent\Casts\AsStringable;
 
 class Album extends Model
 {
@@ -18,14 +18,6 @@ class Album extends Model
         'is_published' => 'boolean',
         'published_at' => 'datetime',
         'excerpt' => AsStringable::class,
-    ];
-
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'pivot',
-        'user_id',
     ];
 
     public function artist()

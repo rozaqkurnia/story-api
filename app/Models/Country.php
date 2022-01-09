@@ -11,12 +11,4 @@ class Country extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
-
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'pivot',
-        'user_id',
-    ];
 }

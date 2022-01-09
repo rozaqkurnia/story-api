@@ -13,14 +13,6 @@ class Song extends Model
 
     protected $guarded = [];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'pivot',
-        'user_id',
-    ];
-
     protected $casts = [
         'is_draft' => 'boolean',
         'is_published' => 'boolean',
@@ -103,6 +95,6 @@ class Song extends Model
 
     public function comments()
     {
-        return $this->moprhMany(Comment::class, 'resource');
+        return $this->morphMany(Comment::class, 'resource');
     }
 }

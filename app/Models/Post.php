@@ -20,14 +20,6 @@ class Post extends Model
         'excerpt' => AsStringable::class,
     ];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'pivot',
-        'user_id',
-    ];
-
     public function user()
     {
         return $this->belongsTo(User::class);

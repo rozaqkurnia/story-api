@@ -12,14 +12,6 @@ class Genre extends Model
 
     protected $guarded = [];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'pivot',
-        'user_id',
-    ];
-
     public function songs()
     {
         return $this->belongsToMany(Song::class, 'song_genre')
