@@ -4,60 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Genre extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    public $timestamps = false;
-    protected $fillable = [
-        'name',
-        'slug',
-    ];
+    protected $guarded = [];
+
     protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
         'pivot',
+        'user_id',
     ];
 
-    public function lyrics()
+    public function songs()
     {
-        return $this->belongsToMany(Lyrics::class)->withTimestamps();
-    }
-
-    /**
-     * Mutators
-     */
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = $value;
-        if ($this->slug == null) {
-            $this->slug = $value;
-        }
-    }
-    public function setSlugAttribute($value)
-    {
-        $this->attributes['slug'] = Str::slug($value);
-    }
-
-    /**
-     * Event
-     */
-    protected static function booted()
-    {
-        static::creating(function ($genre) {
-            if ($genre['slug'] == null) {
-                $genre['slug'] = Str::slug($genre['name']);
-            }
-        });
-        static::updating(function ($genre) {
-            if ($genre['slug'] == null) {
-                $genre['slug'] = Str::slug($genre['name']);
-            }
-        });
-        static::saving(function ($genre) {
-            if ($genre['slug'] == null) {
-                $genre['slug'] = Str::slug($genre['name']);
-            }
-        });
+        return $this->belongsToMany(Song::class, 'song_genre')
+            ->withTimestamps();
     }
 }

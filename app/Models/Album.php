@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Casts\AsStringable;
+use Illuminate\Database\Casts\AsStringable;
 
-class Post extends Model
+class Album extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -28,14 +28,24 @@ class Post extends Model
         'user_id',
     ];
 
+    public function artist()
+    {
+        return $this->belongsTo(Artist::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function tags()
+    public function songs()
     {
-        return $this->morphMany(Tag::class, 'taggables');
+        return $this->hasMany(Song::class);
     }
 
     public function meta()

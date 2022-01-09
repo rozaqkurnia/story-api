@@ -4,70 +4,45 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Casts\AsStringable;
 
 class Artist extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'name', 'slug', 'short_description', 'description'
+    protected $guarded = [];
+
+    protected $casts = [
+        'is_draft' => 'boolean',
+        'is_published' => 'boolean',
+        'published_at' => 'datetime',
+        'excerpt' => AsStringable::class,
     ];
 
-    protected $hidden = ['pivot'];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'pivot',
+        'user_id',
+    ];
 
-    /**
-     * Relationship
-     */
     public function countries()
     {
-        return $this->belongsToMany(Country::class)->withTimestamps();
+        return $this->belongsToMany(Country::class, 'artist_country')
+            ->withTimestamps();
     }
 
-    public function lyrics()
+    public function albums()
     {
-        return $this->belongsToMany(Lyrics::class, 'lyrics_artist')->withPivot('role')->withTimestamps();
+        return $this->hasMany(Album::class);
     }
 
-    public function meta()
+    public function songs()
     {
-        return $this->morphOne(Meta::class, 'post');
-    }
-
-    /**
-     * Mutators
-     */
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = $value;
-        if ($this->slug == null) {
-            $this->slug = $value;
-        }
-    }
-    public function setSlugAttribute($value)
-    {
-        $this->attributes['slug'] = Str::slug($value);
-    }
-
-    /**
-     * Event
-     */
-    protected static function booted()
-    {
-        static::creating(function ($artist) {
-            if ($artist['slug'] == null) {
-                $artist['slug'] = Str::slug($artist['name']);
-            }
-        });
-        static::updating(function ($artist) {
-            if ($artist['slug'] == null) {
-                $artist['slug'] = Str::slug($artist['name']);
-            }
-        });
-        static::saving(function ($artist) {
-            if ($artist['slug'] == null) {
-                $artist['slug'] = Str::slug($artist['name']);
-            }
-        });
+        return $this->belongsToMany(Song::class, 'song_artist')
+            ->withPivot('as')
+            ->withTimestamps();
     }
 }
