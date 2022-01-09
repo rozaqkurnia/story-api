@@ -2,13 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Admin\ArtistController;
-use App\Http\Controllers\Api\Admin\CountryController;
-use App\Http\Controllers\Api\Admin\LanguageController;
-use App\Http\Controllers\Api\Admin\LyricsController;
-use App\Http\Controllers\Api\Client\LyricsController as ClientLyrics;
-use App\Http\Controllers\Api\Client\ArtistController as ClientArtist;
-use App\Http\Controllers\Api\Client\GenreController as ClientGenre;
+use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\GenreController;
+use App\Http\Controllers\Api\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +20,7 @@ use App\Http\Controllers\Api\Client\GenreController as ClientGenre;
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::apiResource('countries', CountryController::class);
+Route::apiResource('genres', GenreController::class);
+Route::apiResource('languages', LanguageController::class);
